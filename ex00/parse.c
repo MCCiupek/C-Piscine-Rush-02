@@ -6,11 +6,11 @@
 /*   By: mciupek <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/22 13:25:09 by mciupek           #+#    #+#             */
-/*   Updated: 2019/06/22 21:57:22 by vgallois         ###   ########.fr       */
+/*   Updated: 2019/06/23 14:57:46 by mciupek          ###   ########.fr       */
+/*   Updated: 2019/06/23 14:23:10 by maspiewa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
 #include <fcntl.h>
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -22,7 +22,7 @@
 
 char	*ft_read(char *s)
 {
-	char buff[BUF_SIZE + 1];
+	char	buff[BUF_SIZE + 1];
 	int		ret;
 	char	*str;
 	int		len;
@@ -62,7 +62,7 @@ int		count_line(char *s)
 	return (count);
 }
 
-t_dict *parse(char *s)
+t_dict	*parse(char *s)
 {
 	char	*str;
 	int		len;
@@ -71,12 +71,6 @@ t_dict *parse(char *s)
 	t_dict	*dict;
 
 	len = 0;
-/*	while ((ret = read(fd, str, BUF_SIZE)))
-	{
-		str[ret] = '\0';
-		if (str[0] == '\n')
-			len++;
-	}*/
 	str = ft_read(s);
 	len = count_line(s);
 	if (!(dict = (t_dict*)malloc(sizeof(t_dict) * (len + 2))))
@@ -88,17 +82,18 @@ t_dict *parse(char *s)
 		dict[j].number = ft_mystrdup(str + i, " :");
 		dict[j].len = ft_strlen(dict[j].number);
 		i += ft_strlen(dict[j].number);
-		while (str[i] == ' ') 
+		while (str[i] == ' ')
 			i++;
 		if (str[i] != ':')
 			return (0);
 		i++;
-		while (str[i] == ' ') 
+		while (str[i] == ' ')
 			i++;
 		dict[j].str = ft_mystrdup(str + i, "\n");
 		i += ft_strlen(dict[j].str) + 1;
 		j++;
 	}
 	dict[j].len = 0;
+	free(str);
 	return (dict);
 }

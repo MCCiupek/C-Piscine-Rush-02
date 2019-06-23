@@ -6,32 +6,33 @@
 /*   By: vgallois <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/22 18:35:01 by vgallois          #+#    #+#             */
-/*   Updated: 2019/06/23 02:17:07 by mciupek          ###   ########.fr       */
+/*   Updated: 2019/06/23 14:02:29 by mciupek          ###   ########.fr       */
+/*   Updated: 2019/06/23 14:24:15 by maspiewa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft.h"
-#include <stdio.h>
 
 int	main(int ac, char **av)
 {
 	t_dict	*dict;
 	char	*s;
-	if ((s = ft_myatoi(av[1])) == NULL)
+
+	if (ac != 2)
+	{
+		ft_putstr("Error\n");
 		return (0);
-	printf("%s\n", s);
+	}
+	if (!(s = ft_myatoi(av[1])))
+		return (0);
 	if (!ft_checkparams(ac, s))
 		return (0);
-	if (ac > 2)
+	if (!(dict = parse("numbers.dict")))
 		return (0);
-	dict = parse("numbers.dict");
-//	int i = 0;
-//	while (dict[i].len != 0)
-//	{
-//		printf("dict[%d]:\n%s\n%s\n", i, dict[i].number, dict[i].str);
-//		i++;
-//	}
-	printf("parse ok\n");
+	sortdict(dict);
 	printnumber(s, ft_strlen(s), dict);
+	ft_putstr("\n");
+	ft_cleanmem(dict);
+//	printf("%s\n", dict[10].number);
 	return (0);
 }

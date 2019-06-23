@@ -6,41 +6,60 @@
 /*   By: mciupek <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/23 01:22:02 by mciupek           #+#    #+#             */
-/*   Updated: 2019/06/23 02:52:42 by mciupek          ###   ########.fr       */
+/*   Updated: 2019/06/23 15:55:38 by maspiewa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft.h"
 #include <unistd.h>
-#include <stdio.h>
 
-char *ft_myatoi(char *str)
+char	*ft_skipzeros(char *str)
+{
+	unsigned int i;
+	unsigned int j;
+
+	i = 0;
+	while (str[i] == '0')
+		i++;
+	j = 0;
+	if (i == ft_strlen(str))
+	{
+		str = "0";
+		return (str);
+	}
+	while (j + i <= ft_strlen(str))
+	{
+		str[j] = str[j + i];
+		j++;
+	}
+	return (str);
+}
+
+char	*ft_myatoi(char *str)
 {
 	int		len;
 	int		i;
 	int		j;
 	char	sep;
 
-	i = 1;
+	i = 0;
 	len = ft_strlen(str);
-	if (len > 4 && (str[len - 4] == ' ' || str[len - 4] == ','))
-		sep = str[len - 4];
-	else 
-		return (str);
-	while (str[len - i])
+	if (!(len > 4 && (str[len - 4] == ' ' || str[len - 4] == ',')))
+		return (ft_skipzeros(str));
+	sep = str[len - 4];
+	while (str[len - ++i])
 	{
 		if (!(i % 4))
 		{
 			if (str[len - i] != sep)
-				return (NULL);
-			j = len - i;
-			while (str[j])
 			{
-				str[j] = str[j + 1];
-				j++;
+				ft_putstr("Error\n");
+				return (NULL);
 			}
+			j = len - i - 1;
+			while (str[++j])
+				str[j] = str[j + 1];
 		}
-		i++;
 	}
-	return (str);
+	return (ft_skipzeros(str));
 }
