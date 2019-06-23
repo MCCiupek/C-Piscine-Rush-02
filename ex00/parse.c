@@ -6,8 +6,7 @@
 /*   By: mciupek <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/22 13:25:09 by mciupek           #+#    #+#             */
-/*   Updated: 2019/06/23 14:57:46 by mciupek          ###   ########.fr       */
-/*   Updated: 2019/06/23 14:23:10 by maspiewa         ###   ########.fr       */
+/*   Updated: 2019/06/23 22:38:36 by vgallois         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +29,8 @@ char	*ft_read(char *s)
 
 	len = 0;
 	fd = open(s, O_RDONLY);
+	if (fd == -1)
+		return (NULL);
 	while ((ret = read(fd, buff, BUF_SIZE)))
 		len = len + ret;
 	close(fd);
@@ -62,36 +63,50 @@ int		count_line(char *s)
 	return (count);
 }
 
+int		ft_skip(char *str)
+{
+	int i;
+
+	i = 0;
+	while (str[i] == ' ')
+		i++;
+	return (i);
+}
+
+t_dict	*init_dict(char *s)
+{
+	int		len;
+	t_dict	*dict;
+
+	len = count_line(s);
+	if (!(dict = (t_dict*)malloc(sizeof(t_dict) * (len + 2))))
+		return (0);
+	return (dict);
+}
+
 t_dict	*parse(char *s)
 {
 	char	*str;
-	int		len;
 	int		i;
 	int		j;
 	t_dict	*dict;
 
-	len = 0;
 	str = ft_read(s);
-	len = count_line(s);
-	if (!(dict = (t_dict*)malloc(sizeof(t_dict) * (len + 2))))
+	if (!str || !(dict = init_dict(s)))
 		return (0);
 	i = 0;
-	j = 0;
+	j = -1;
 	while (str[i] != '\n' && str[i] != '\0')
 	{
-		dict[j].number = ft_mystrdup(str + i, " :");
+		dict[++j].number = ft_mystrdup(str + i, " :");
 		dict[j].len = ft_strlen(dict[j].number);
-		i += ft_strlen(dict[j].number);
-		while (str[i] == ' ')
-			i++;
+		i += ft_strlen(dict[j].number) +
+			ft_skip(str + i + ft_strlen(dict[j].number));
 		if (str[i] != ':')
 			return (0);
-		i++;
-		while (str[i] == ' ')
-			i++;
+		i += 1 + ft_skip(str + i + 1);
 		dict[j].str = ft_mystrdup(str + i, "\n");
 		i += ft_strlen(dict[j].str) + 1;
-		j++;
 	}
 	dict[j].len = 0;
 	free(str);

@@ -6,7 +6,7 @@
 /*   By: mciupek <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/23 01:22:02 by mciupek           #+#    #+#             */
-/*   Updated: 2019/06/23 15:55:38 by maspiewa         ###   ########.fr       */
+/*   Updated: 2019/06/23 20:34:09 by vgallois         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@ char	*ft_skipzeros(char *str)
 	unsigned int i;
 	unsigned int j;
 
+	if (!(*str))
+		return (str);
 	i = 0;
 	while (str[i] == '0')
 		i++;
@@ -44,7 +46,7 @@ char	*ft_myatoi(char *str)
 
 	i = 0;
 	len = ft_strlen(str);
-	if (!(len > 4 && (str[len - 4] == ' ' || str[len - 4] == ',')))
+	if (!(*str) || !(len > 4 && (str[len - 4] == ' ' || str[len - 4] == ',')))
 		return (ft_skipzeros(str));
 	sep = str[len - 4];
 	while (str[len - ++i])
